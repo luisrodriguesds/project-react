@@ -1,25 +1,27 @@
-import {Button, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Input, Row} from "reactstrap";
-import React, {useState} from "react";
+import {Button, Card, CardBody, CardImg, CardTitle, Input, Row} from "reactstrap";
+import React, {FunctionComponent, useState} from "react";
 import {InputType} from "reactstrap/es/Input";
 
-type TextDisplay= {value:string,type:InputType | undefined}
+type TextDisplay= {value:string,type:InputType | undefined};
+type SubmitButton={onSubmit:(subtitle:string,description:string)=>void,text:string}
+type GenericProps={title:string,firstInput:string,img:string,secondInput:TextDisplay,button:SubmitButton}
 
-const GenericCard = ({title,subtitle,img,description}:{title:string,subtitle:string,img:string,description:TextDisplay})=>{
-
-    const [desc,setDesc]= useState(description.value)
-    return <Card className="App-header">
-        <CardImg top width="100%" src={img} alt="Card image cap" />
+const GenericCard : FunctionComponent<GenericProps>= ({children,title,firstInput,img,secondInput,button})=>{
+    const [sub,setSub]= useState(firstInput)
+    const [desc,setDesc]= useState(secondInput.value)
+    return <Card style={{background:'#ecd3d3',height:"70%",width:'40%',position:"relative",top:"5%",bottom:"5%"}}>
+        <CardImg top style={{height:'40%' }} src={img} alt="Card image cap" />
         <CardBody>
             <CardTitle tag="h5">{title}</CardTitle>
             <Row >
-                <Input type="email" placeholder={subtitle} />
+                <Input type="email" value={sub} onChange={event => setSub(event.target.value)}/>
             </Row>
 
             <Row >
-                <Input type={description.type} placeholder={description.value} onChange={(event => setDesc(description.type==="textarea"?desc:event.target.value))}>{desc}</Input>
+                <Input type={secondInput.type} onChange={(event => setDesc(event.target.value))} value={desc}/>
             </Row>
-
-            <Button>Button</Button>
+            {children}
+            <Button onClick={()=>button.onSubmit(sub,desc)}>{button.text}</Button>
         </CardBody>
     </Card>
 }
