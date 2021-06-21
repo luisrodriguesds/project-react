@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  background: linear-gradient(145deg, #f0f0f0, #cacaca);;
 }
 
 .App-logo {
@@ -38,4 +39,37 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.neumorphism{
+  border-radius: 48px;
+  background: linear-gradient(145deg, #f0f0f0, #cacaca);
+  box-shadow:  8px 8px 16px #5a5a5a,
+  -8px -8px 16px #ffffff;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90);
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  padding-bottom: 30px;
+  padding-top: 30px;
+  overflow-x:hidden;
+  overflow-y:hidden;
+  border-radius: 30px;
+
+}
+.spacing{
+  margin-top:30px;
 }

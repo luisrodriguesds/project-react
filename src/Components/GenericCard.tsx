@@ -9,7 +9,7 @@ type GenericProps={title:string,firstInput:string,img:string,secondInput:TextDis
 const GenericCard : FunctionComponent<GenericProps>= ({children,title,firstInput,img,secondInput,button})=>{
     const [sub,setSub]= useState(firstInput)
     const [desc,setDesc]= useState(secondInput.value)
-    return <Card style={{background:'#ecd3d3',height:"70%",width:'40%',position:"relative",top:"5%",bottom:"5%"}}>
+    return <Card style={{background:'#ecd3d3',height:"90%",width:'90%',position:"relative",top:"5%",bottom:"5%"}}>
         <CardImg top style={{height:'40%' }} src={img} alt="Card image cap" />
         <CardBody>
             <CardTitle tag="h5">{title}</CardTitle>
