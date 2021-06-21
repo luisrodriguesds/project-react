@@ -8,8 +8,8 @@
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -25,6 +25,9 @@
   },
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "no-unused-vars": "off",
+    "react/prop-types": "off",
     "prettier/prettier": [
       "error",
       {
@@ -38,7 +41,6 @@
     "react/jsx-curly-newline": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-unused-expressions": "off",
@@ -53,7 +55,7 @@
         "prefixWithI": "always"
       }
     ],
-    "@typescript-eslint/no-explicit-any":"off",
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
