@@ -2,10 +2,26 @@ import React from "react";
 
 import GenericCard from "../Components/GenericCard";
 import { Container, Row, Col } from "reactstrap";
+import { useAuth } from "../contexts/auth";
 
 const SignIn: React.FC = () => {
-  const handleSubmit = (email: string, password: string) => {
+  const { signIn } = useAuth();
+
+  const handleSubmit = async (email: string, password: string) => {
     console.log(email, password, "aqui");
+    if ([email, password].some((item) => item === "")) {
+      alert("Um ou mais campo estão vazios!");
+    }
+
+    // call the conext api
+    try {
+      await signIn({
+        email,
+        password,
+      });
+    } catch (error) {
+      // error com alert
+    }
   };
 
   return (
