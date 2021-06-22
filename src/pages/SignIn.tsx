@@ -91,9 +91,10 @@ const SignIn: React.FC = () => {
               <Button
                 loading={btnLoading}
                 variant="dark"
-                title="Login"
+                title="Sign In"
                 type="submit"
                 disabled={btnLoading}
+                className="w-100"
               />
             </Form>
           </Card>
