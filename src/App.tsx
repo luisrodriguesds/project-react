@@ -4,6 +4,8 @@ import AuthProvider from "./contexts/auth";
 
 import Routes from "./routes";
 
+import "./App.css";
+
 function App() {
   return (
     <div className="App">
