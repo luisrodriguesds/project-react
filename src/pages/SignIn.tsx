@@ -1,39 +1,47 @@
 import React, { useState } from "react";
 
 // import GenericCard from "../Components/GenericCard";
-import { Form, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import Card from "../Components/Card";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth } from "../contexts/auth";
 import Alert from "../Components/AlertMessage";
+import Button from "../Components/Button";
 
 const SignIn: React.FC = () => {
   const { signIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const [messageError, setMessageError] = useState("");
   const [errorIsOpen, setErrorIsOpen] = useState(false);
 
   const handleSubmit = async (e: any) => {
+    setBtnLoading(true);
+
     e.preventDefault();
     console.log(email, password, "aqui");
 
-    if ([email, password].some((item) => item === "")) {
-      setMessageError("Um ou mais campo então vazios");
-      setErrorIsOpen(true);
-      return;
-    }
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // call the conext api
     try {
+      if ([email, password].some((item) => item === "")) {
+        setMessageError("Um ou mais campo então vazios");
+        setErrorIsOpen(true);
+        return;
+      }
+
+      // call the conext api
       await signIn({
         email,
         password,
       });
     } catch (error) {
       // error com alert
+    } finally {
+      setBtnLoading(false);
     }
   };
 
@@ -47,7 +55,7 @@ const SignIn: React.FC = () => {
             header="Login Panel"
             style={{ minWidth: "380px" }}
             image="/assets/logo-login.png"
-            footer={`© Celfocus, Junho 2021`}
+            footer={`© Celfocus, June 2021`}
           >
             <Alert
               message={messageError}
@@ -80,9 +88,13 @@ const SignIn: React.FC = () => {
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Remember me" />
               </Form.Group>
-              <Button variant="dark" type="submit" block={true}>
-                Login
-              </Button>
+              <Button
+                loading={btnLoading}
+                variant="dark"
+                title="Login"
+                type="submit"
+                disabled={btnLoading}
+              />
             </Form>
           </Card>
           {/* <GenericCard
