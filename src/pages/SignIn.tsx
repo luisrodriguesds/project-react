@@ -41,19 +41,20 @@ const SignIn: React.FC = () => {
     <Container className="vh-100 d-flex align-items-center">
       <Row className="mx-auto">
         <Col sm="12">
-          <Alert
-            message={messageError}
-            isOpen={errorIsOpen}
-            handleIsOpen={setErrorIsOpen}
-            variant="danger"
-          />
           <Card
             varient="light"
             className="p-4"
             header="Login Panel"
             style={{ minWidth: "380px" }}
             image="/assets/logo-login.png"
+            footer={`© Celfocus, Junho 2021`}
           >
+            <Alert
+              message={messageError}
+              isOpen={errorIsOpen}
+              handleIsOpen={setErrorIsOpen}
+              variant="danger"
+            />
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>

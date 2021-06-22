@@ -51,7 +51,11 @@ const CardLogin: React.FC<ICard> = ({
         </Card.Text> */}
       </Card.Body>
       {footer && (
-        <Card.Footer className="text-white text-center">{footer}</Card.Footer>
+        <Card.Footer
+          className={`${varient === "light" ? "dark" : "white"} text-center`}
+        >
+          {footer}
+        </Card.Footer>
       )}
     </Card>
   );

@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react";
-import { Alert, Button } from "reactstrap";
+import { Alert } from "reactstrap";
 
 type varients =
   | "primary"
@@ -26,15 +26,14 @@ const AlertMessage: React.FC<IAlertMessage> = ({
 }) => {
   return (
     <Alert className={`alert-${variant}`} isOpen={isOpen}>
-      <p>{message}</p>
-      <hr />
-      <div className="d-flex justify-content-end">
-        <Button
+      <div className="d-flex justify-content-between">
+        {message}
+        <span
           onClick={() => handleIsOpen(false)}
-          className={`btn-${variant}`}
+          style={{ cursor: "pointer", lineHeight: "10px" }}
         >
-          Close Alert
-        </Button>
+          ×
+        </span>
       </div>
     </Alert>
   );
