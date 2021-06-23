@@ -40,16 +40,22 @@ const SignIn: React.FC = () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
+    const [email, password] = Object.values(
+      formValues.map((item) => item.value)
+    );
+
     try {
-      if (formValues.some((item) => item.value === "")) {
-        setMessageError("One or more fields empty");
-        setErrorIsOpen(true);
-        return;
+      if (!email) {
+        throw new Error("Email is empty...");
       }
 
-      const [email, password] = Object.values(
-        formValues.map((item) => item.value)
-      );
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        throw new Error("Email is not valid...");
+      }
+
+      if (!password) {
+        throw new Error("Password is empty...");
+      }
 
       // call the conext api
       await signIn({
@@ -57,7 +63,8 @@ const SignIn: React.FC = () => {
         password: password || "",
       });
     } catch (error) {
-      // error com alert
+      setMessageError(error.message);
+      setErrorIsOpen(true);
     } finally {
       setBtnLoading(false);
     }

@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { checkCredentials } from "../utils/check-credentials";
 
 interface IUser {
   id: string;
@@ -43,32 +44,37 @@ const AuthProvider: React.FC = ({ children }) => {
   const signIn = useCallback(
     async (credentials: ICredentials) => {
       try {
-        // simualte request to server
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const { user, token } = await checkCredentials({
+          email: credentials.email,
+          password: credentials.password,
+        });
 
-        const mockSignInResponse = {
-          user: {
-            id: "id-mock",
-            name: "Carlos Vasconcelos",
-            email: credentials.email,
-            starts: [],
-          },
-          token: "unique-token-here",
-        };
-
-        const { user, token } = mockSignInResponse;
+        // Check user starts
+        const starts = [] as Array<string>;
 
         // Set mock data in state var data
-        setData(mockSignInResponse);
+        setData({
+          token,
+          user: {
+            ...user,
+            starts,
+          },
+        });
 
-        // put on localstorage
+        // put on localStorage
         localStorage.setItem("@pr:token", token);
-        localStorage.setItem("@pr:user", JSON.stringify(user));
+        localStorage.setItem(
+          "@pr:user",
+          JSON.stringify({
+            ...user,
+            starts,
+          })
+        );
 
         // redirect
         history.push("/catalog");
       } catch (error) {
-        throw new Error("Something is wrong");
+        throw new Error(error.message);
       }
     },
     [history]
