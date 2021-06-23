@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { checkCredentials } from "../utils/check-credentials";
+import { checkCredentials } from "../utils/checkCredentials";
 
 interface IUser {
   id: string;
