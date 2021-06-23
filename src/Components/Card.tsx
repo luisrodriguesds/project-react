@@ -1,6 +1,8 @@
 import React, { HTMLAttributes } from "react";
+import { Form } from "react-bootstrap";
 
 import { Card } from "react-bootstrap";
+import Button from "../Components/Button";
 
 type varients =
   | "primary"
@@ -12,12 +14,27 @@ type varients =
   | "light"
   | "dark";
 
+export interface IInputCard {
+  name?: string;
+  placeholder?: string;
+  value?: string;
+  label?: string;
+  type?: string;
+}
+
 interface ICard extends HTMLAttributes<HTMLDivElement> {
   header?: string;
   title?: string;
   varient: varients;
   footer?: string;
   image?: string;
+  inputs?: IInputCard[];
+  handleInput?: (input: IInputCard[]) => void;
+  onSubmitForm?: (input: IInputCard[]) => void;
+  buttonsubmit?: {
+    label: string;
+    isLoading: boolean;
+  };
 }
 
 const CardLogin: React.FC<ICard> = ({
@@ -28,8 +45,29 @@ const CardLogin: React.FC<ICard> = ({
   varient,
   children,
   className,
+  inputs,
+  handleInput,
+  onSubmitForm,
+  buttonsubmit,
   ...rest
 }) => {
+  function onChange(input: IInputCard, value: any) {
+    const findInput = inputs?.find((item) => item.name === input.name);
+    if (!findInput) {
+      return;
+    }
+    const newInputs = inputs?.map((item) => {
+      if (item.name === input.name) {
+        return {
+          ...item,
+          value,
+        };
+      }
+      return item;
+    });
+    handleInput && newInputs && handleInput(newInputs);
+  }
+
   return (
     <Card bg={varient} text={varient === "light" ? "dark" : "white"} {...rest}>
       {header && <Card.Header>{header}</Card.Header>}
@@ -43,12 +81,39 @@ const CardLogin: React.FC<ICard> = ({
       )}
       <Card.Body className={className}>
         {title && <Card.Title>{title}</Card.Title>}
-        {children}
-        {/* <Card.Text>
-          With supporting text below as a natural lead-in to additional content.
-          sadgfsadf sjafgaksjfgas dfashdgfasldfas dfasdhfgasjdfgjsdgfjkasgdfasd
-          asdfasfgljk
-        </Card.Text> */}
+        {inputs?.length && (
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmitForm && onSubmitForm(inputs);
+            }}
+          >
+            {inputs.map((input, i) => (
+              <Form.Group
+                key={`${i}`}
+                className="mb-3"
+                controlId={`formBasic-${i}`}
+              >
+                <Form.Label>{input.label}</Form.Label>
+                <Form.Control
+                  type={input.type}
+                  name={input.name}
+                  placeholder={input.placeholder}
+                  onChange={(e) => onChange(input, e.target.value)}
+                />
+              </Form.Group>
+            ))}
+
+            <Button
+              variant="dark"
+              loading={buttonsubmit?.isLoading}
+              title={buttonsubmit?.label || ""}
+              type="submit"
+              className="w-100"
+            />
+          </Form>
+        )}
+        {/* {children} */}
       </Card.Body>
       {footer && (
         <Card.Footer

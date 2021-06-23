@@ -44,7 +44,7 @@ const AuthProvider: React.FC = ({ children }) => {
     async (credentials: ICredentials) => {
       try {
         // simualte request to server
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         const mockSignInResponse = {
           user: {
