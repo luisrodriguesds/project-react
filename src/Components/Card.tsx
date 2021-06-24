@@ -95,12 +95,22 @@ const CardLogin: React.FC<ICard> = ({
                 controlId={`formBasic-${i}`}
               >
                 <Form.Label>{input.label}</Form.Label>
-                <Form.Control
-                  type={input.type}
-                  name={input.name}
-                  placeholder={input.placeholder}
-                  onChange={(e) => onChange(input, e.target.value)}
-                />
+                {input.type === "textarea" ? (
+                  <Form.Control
+                    type={input.type}
+                    name={input.name}
+                    as="textarea"
+                    placeholder={input.placeholder}
+                    onChange={(e) => onChange(input, e.target.value)}
+                  />
+                ) : (
+                  <Form.Control
+                    type={input.type}
+                    name={input.name}
+                    placeholder={input.placeholder}
+                    onChange={(e) => onChange(input, e.target.value)}
+                  />
+                )}
               </Form.Group>
             ))}
 
