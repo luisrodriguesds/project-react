@@ -1,15 +1,13 @@
 import React from "react";
-import { useAuth } from "../contexts/auth";
 
+import Template from "../weigets/Template";
 // import { Container } from './styles';
 
 const Catalog: React.FC = () => {
-  const { user } = useAuth();
   return (
-    <div>
+    <Template>
       <h1>Catalog</h1>
-      <h2>{user.name}</h2>
-    </div>
+    </Template>
   );
 };
 
