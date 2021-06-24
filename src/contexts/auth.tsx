@@ -21,6 +21,7 @@ interface ICredentials {
 
 interface IAuthContext {
   signIn: (credentials: ICredentials) => Promise<void>;
+  singOut: () => void;
   user: IUser;
   isLogged: boolean;
   addFavorite: (repo: any) => void;
@@ -32,6 +33,7 @@ const AuthContext = createContext({} as IAuthContext);
 
 const AuthProvider: React.FC = ({ children }) => {
   const history = useHistory();
+
   const [data, setData] = useState<ISignInResponse>(() => {
     const token = localStorage.getItem("@pr:token");
     const user = localStorage.getItem("@pr:user")
@@ -97,6 +99,13 @@ const AuthProvider: React.FC = ({ children }) => {
     [history]
   );
 
+  const singOut = useCallback(() => {
+    setData({} as ISignInResponse);
+    localStorage.removeItem("@pr:token");
+    localStorage.removeItem("@pr:user");
+    history.push("/");
+  }, [history]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -106,6 +115,7 @@ const AuthProvider: React.FC = ({ children }) => {
         addFavorite,
         removeFavorite,
         checkIfFavorite
+        singOut,
       }}
     >
       {children}
