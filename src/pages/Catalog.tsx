@@ -14,12 +14,15 @@ import {
 } from "reactstrap";
 import Card from "../Components/Card";
 import Template from "../weigets/Template";
+import {Modal} from "react-bootstrap";
 
 const userTOKEN = `${process.env.REACT_APP_GITHUB_TOKEN}`;
 const Catalog: React.FC = () => {
   const { checkIfFavorite, addFavorite, removeFavorite } = useAuth();
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("a");
+  const [modalShow,setModal]= useState(false)
+  const [modalInfo,setModalInfo]:[any,any]= useState({})
   const [repos, setRepos]: [
     any[],
     React.Dispatch<React.SetStateAction<never[]>>
@@ -52,6 +55,38 @@ const Catalog: React.FC = () => {
 
   return (
     <Template>
+          <Modal show={modalShow}>
+        <Modal.Header>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Card id={modalInfo?.id +"card"} varient="light" className="p-4" header={header(modalInfo)}
+                style={{background:'#ecd3d3',height:"90%",width:'90%',position:"relative",top:"5%",bottom:"5%"}}
+                image={modalInfo?.owner?.avatar_url}
+                inputs={[
+                  {
+                    name: "Full name",
+                    value: modalInfo.full_name,
+                    placeholder: modalInfo.full_name,
+                    label: "Full name",
+                    type: "text",
+                  },
+                  {
+                    name: "Description",
+                    value: modalInfo.description,
+                    placeholder: modalInfo.description,
+                    label: "Description",
+                    type: "textarea",
+                  },
+                ]}
+                onSubmitForm={()=>setModal(false)}
+                buttonsubmit={{
+                  label: "Close",
+                  isLoading: false,
+                }}
+          ></Card>
+        </Modal.Body>
+      </Modal>
       <Row>
         <Col sm="12" lg="6" md="8" className="mx-auto">
           <InputGroup>
@@ -111,7 +146,7 @@ const Catalog: React.FC = () => {
                       type: "textarea",
                     },
                   ]}
-                  onSubmitForm={(data) => console.log(data)}
+                  onSubmitForm={(data) => {setModalInfo(res);setModal(true);}
                   buttonsubmit={{
                     label: "View more",
                     isLoading: false,
@@ -122,39 +157,7 @@ const Catalog: React.FC = () => {
           </Row>
         </Container>
       </div>
-      <Pagination
-        aria-label="Page navigation example"
-        style={{
-          display: "flex",
-          position: "fixed",
-          width: "40%",
-          bottom: "2%",
-          left: "35%",
-        }}
-      >
-        <PaginationItem disabled={page === 1} onClick={(event) => setPage(1)}>
-          <PaginationLink first />
-        </PaginationItem>
-        <PaginationItem
-          disabled={page === 1}
-          onClick={(event) => setPage(page - 1)}
-        >
-          <PaginationLink previous />
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">{page}</PaginationLink>
-        </PaginationItem>
-
-        <PaginationItem
-          disabled={page === 10}
-          onClick={(event) => setPage(page + 1)}
-        >
-          <PaginationLink next />
-        </PaginationItem>
-        <PaginationItem disabled={page === 10} onClick={(event) => setPage(10)}>
-          <PaginationLink last href="#" />
-        </PaginationItem>
-      </Pagination>
+      <Page maxValue={10} value={page} onValueChange={(val)=>setPage(val)} />
     </Template>
   );
 };

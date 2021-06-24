@@ -80,7 +80,7 @@ const SignIn: React.FC = () => {
             handleIsOpen={setErrorIsOpen}
             variant="danger"
           />
-          <Card
+          <Card id={"signinCard"}
             varient="light"
             className="p-4"
             header="Login Panel"
