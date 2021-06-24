@@ -10,7 +10,7 @@ body {
 } */
 
 .neumorphism {
-  min-height: calc(100vh - 56px + 24px + 38px + 24px);
+  min-height: calc(100vh - 180px);
   border-radius: 48px;
   background: linear-gradient(145deg, #f0f0f0, #cacaca);
   box-shadow: 8px 8px 16px #5a5a5a, -8px -8px 16px #ffffff;
