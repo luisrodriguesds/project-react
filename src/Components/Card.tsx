@@ -23,7 +23,7 @@ export interface IInputCard {
 }
 
 interface ICard extends HTMLAttributes<HTMLDivElement> {
-  header?: string;
+  header?: any;
   title?: string;
   varient: varients;
   footer?: string;
@@ -92,7 +92,6 @@ const CardLogin: React.FC<ICard> = ({
               <Form.Group
                 key={`${i}`}
                 className="mb-3"
-                controlId={`formBasic-${i}`}
               >
                 <Form.Label>{input.label}</Form.Label>
                 <Form.Control
