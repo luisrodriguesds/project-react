@@ -70,7 +70,7 @@ const CardLogin: React.FC<ICard> = ({
 
   return (
     <Card bg={varient} text={varient === "light" ? "dark" : "white"} {...rest}>
-      {header && <Card.Header>{header}</Card.Header>}
+      {header && <Card.Header className="mb-4">{header}</Card.Header>}
       {image && (
         <Card.Img
           variant="top"
@@ -89,16 +89,14 @@ const CardLogin: React.FC<ICard> = ({
             }}
           >
             {inputs.map((input, i) => (
-              <Form.Group
-                key={`${i}`}
-                className="mb-3"
-              >
+              <Form.Group key={`${i}`} className="mb-3">
                 <Form.Label>{input.label}</Form.Label>
                 {input.type === "textarea" ? (
                   <Form.Control
                     type={input.type}
                     name={input.name}
                     as="textarea"
+                    style={{ minHeight: "140px" }}
                     placeholder={input.placeholder}
                     onChange={(e) => onChange(input, e.target.value)}
                   />

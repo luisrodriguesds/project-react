@@ -13,6 +13,7 @@ import {
   Row,
 } from "reactstrap";
 import Card from "../Components/Card";
+import Template from "../weigets/Template";
 
 const userTOKEN = `${process.env.REACT_APP_GITHUB_TOKEN}`;
 const Catalog: React.FC = () => {
@@ -50,35 +51,38 @@ const Catalog: React.FC = () => {
   }, [query, page]);
 
   return (
-    <React.Fragment>
-      <InputGroup
-        style={{
-          display: "flex",
-          position: "fixed",
-          width: "40%",
-          top: "1%",
-          left: "30%",
-        }}
-      >
-        <Input onChange={(event) => setQuery(event.target.value)} />
-        <InputGroupAddon addonType="append">
-          <Button color={"secondary"}>Search!</Button>
-        </InputGroupAddon>
-      </InputGroup>
+    <Template>
+      <Row>
+        <Col sm="12" lg="6" md="8" className="mx-auto">
+          <InputGroup>
+            <Input
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search Repo on Github!"
+            />
+            <InputGroupAddon addonType="append">
+              <Button color="secondary">Search!</Button>
+            </InputGroupAddon>
+          </InputGroup>
+        </Col>
+      </Row>
       <div
-        className={"neumorphism"}
+        className="neumorphism mt-4"
         style={{
-          display: "flex",
-          position: "fixed",
-          inset: "10% 5% 15% 5%",
-          flexDirection: "column",
+          // position: "fixed",
+          // inset: "10% 5% 15% 5%",
           padding: "1%",
         }}
       >
-        <Container style={{ overflowY: "scroll", overflowX: "hidden" }}>
+        <Container
+          style={{
+            overflowY: "scroll",
+            overflowX: "hidden",
+            height: "calc(100vh - 180px)",
+          }}
+        >
           <Row>
             {repos?.map((res) => (
-              <Col key={res.id} className="spacing" lg="3" sm="4" xs="12">
+              <Col key={res.id} className="spacing mb-4" lg="4" sm="4" xs="12">
                 <Card
                   id={res.id + "card"}
                   varient="light"
@@ -86,8 +90,6 @@ const Catalog: React.FC = () => {
                   header={header(res)}
                   style={{
                     background: "#ecd3d3",
-                    height: "90%",
-                    width: "90%",
                     position: "relative",
                     top: "5%",
                     bottom: "5%",
@@ -153,7 +155,7 @@ const Catalog: React.FC = () => {
           <PaginationLink last href="#" />
         </PaginationItem>
       </Pagination>
-    </React.Fragment>
+    </Template>
   );
 };
 
