@@ -46,20 +46,20 @@ const AuthProvider: React.FC = ({ children }) => {
     return {} as ISignInResponse;
   });
 
-  const addFavorite =(repo:any)=>{
-    let favs={...data};
-    favs.user.starts=[...favs.user.starts,repo.id];
+  const addFavorite = (repo: any) => {
+    let favs = { ...data };
+    favs.user.starts = [...favs.user.starts, repo.id];
     setData(favs);
-  }
-  const removeFavorite =(repo:any)=>{
-    let favs={...data};
-    favs.user.starts=favs.user.starts.filter(id=>id!==repo.id);
+  };
+  const removeFavorite = (repo: any) => {
+    let favs = { ...data };
+    favs.user.starts = favs.user.starts.filter((id) => id !== repo.id);
     setData(favs);
-  }
+  };
 
-  const checkIfFavorite =(repo:any)=>{
-    return data.user.starts.find(id=>id===repo.id) !==undefined
-  }
+  const checkIfFavorite = (repo: any) => {
+    return data.user.starts.find((id) => id === repo.id) !== undefined;
+  };
   const signIn = useCallback(
     async (credentials: ICredentials) => {
       try {
@@ -114,7 +114,7 @@ const AuthProvider: React.FC = ({ children }) => {
         user: data.user,
         addFavorite,
         removeFavorite,
-        checkIfFavorite
+        checkIfFavorite,
         singOut,
       }}
     >
