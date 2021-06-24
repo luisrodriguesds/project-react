@@ -1,14 +1,18 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import AuthProvider from "./contexts/auth";
 
-import Routes from './routes';
-import './App.css';
+import Routes from "./routes";
+
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Routes />
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </Router>
     </div>
   );

@@ -1,49 +1,103 @@
-import React from 'react';
+import React, { useState } from "react";
 
-import GenericCard from '../Components/GenericCard';
-import { Button, CardDeck } from 'reactstrap';
+// import GenericCard from "../Components/GenericCard";
+import Card, { IInputCard } from "../Components/Card";
+import { Container, Row, Col } from "reactstrap";
+import { useAuth } from "../contexts/auth";
+import Alert from "../Components/AlertMessage";
 
 const SignIn: React.FC = () => {
-  return (
-    <div>
-      <CardDeck className={'App'}>
-        <GenericCard
-          title={'Login'}
-          secondInput={{ value: '', type: 'password' }}
-          firstInput={'username'}
-          button={{
-            text: 'Sign In',
-            onSubmit: (subtitle, description) =>
-              console.log('logging in with', subtitle, description),
-          }}
-          img={
-            'https://borlabs.io/wp-content/uploads/2019/09/blog-wp-login.png'
-          }
-        >
-          <input type={'checkbox'} />
-        </GenericCard>
+  const { signIn } = useAuth();
 
-        <GenericCard
-          title={'Github Repo'}
-          firstInput={'Test Repo subtitle'}
-          button={{
-            text: 'View more',
-            onSubmit: (subtitle, description) =>
-              console.log('must zoom in', subtitle, description),
-          }}
-          secondInput={{
-            value:
-              'This github repo is awesome for testing cause his description is fucking big, big like your mother!! Gotcha !!',
-            type: 'textarea',
-          }}
-          img={
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Github-desktop-logo-symbol.svg/1024px-Github-desktop-logo-symbol.svg.png'
-          }
-        >
-          <Button placeholder={'Favorites'} />
-        </GenericCard>
-      </CardDeck>
-    </div>
+  const [form, setForm] = useState<IInputCard[]>([
+    {
+      name: "email",
+      value: "",
+      placeholder: "Enter email",
+      label: "Email Address",
+      type: "email",
+    },
+    {
+      name: "password",
+      value: "",
+      placeholder: "Password",
+      label: "Password",
+      type: "password",
+    },
+  ]);
+
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const [messageError, setMessageError] = useState("");
+  const [errorIsOpen, setErrorIsOpen] = useState(false);
+
+  function handleForm(value: IInputCard[]) {
+    setForm(value);
+  }
+
+  async function onSubmitForm(formValues: IInputCard[]) {
+    setBtnLoading(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const [email, password] = Object.values(
+      formValues.map((item) => item.value)
+    );
+
+    try {
+      if (!email) {
+        throw new Error("Email is empty...");
+      }
+
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        throw new Error("Email is not valid...");
+      }
+
+      if (!password) {
+        throw new Error("Password is empty...");
+      }
+
+      // call the conext api
+      await signIn({
+        email: email || "",
+        password: password || "",
+      });
+    } catch (error) {
+      setMessageError(error.message);
+      setErrorIsOpen(true);
+    } finally {
+      setBtnLoading(false);
+    }
+  }
+
+  return (
+    <Container className="vh-100 d-flex align-items-center">
+      <Row className="mx-auto">
+        <Col sm="12">
+          <Alert
+            message={messageError}
+            isOpen={errorIsOpen}
+            handleIsOpen={setErrorIsOpen}
+            variant="danger"
+          />
+          <Card id={"signinCard"}
+            varient="light"
+            className="p-4"
+            header="Login Panel"
+            style={{ minWidth: "380px" }}
+            image="/assets/logo-login.png"
+            footer={`© Celfocus, June 2021`}
+            inputs={form}
+            handleInput={handleForm}
+            onSubmitForm={onSubmitForm}
+            buttonsubmit={{
+              label: "Sign In",
+              isLoading: btnLoading,
+            }}
+          ></Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
