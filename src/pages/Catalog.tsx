@@ -1,13 +1,18 @@
 import { useAuth } from "../contexts/auth";
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Container, Input, InputGroup, InputGroupAddon, Pagination, PaginationItem,PaginationLink, Row} from "reactstrap";
-import Card, {IInputCard} from "../Components/Card";
+import {Button, Col, Container, FormControl, InputGroup, Row} from "react-bootstrap";
+import Card from "../Components/Card";
+import {Modal} from "react-bootstrap";
+import Page from "./Catalog/Page";
 
-const userTOKEN='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';
+const userTOKEN= process.env.REACT_APP_GIT_TOKEN;
+console.log(userTOKEN)
 const Catalog: React.FC = () => {
   const {checkIfFavorite,addFavorite,removeFavorite}=useAuth()
   const [page,setPage]=useState(1)
   const [query,setQuery] = useState('a')
+  const [modalShow,setModal]= useState(false)
+  const [modalInfo,setModalInfo]:[any,any]= useState({})
   const [repos,setRepos]:[any[], React.Dispatch<React.SetStateAction<never[]>>] = useState([])
 
   const header=(res:any)=><React.Fragment>{res.name}
@@ -25,11 +30,43 @@ const Catalog: React.FC = () => {
 
   return (
     <React.Fragment>
-      <InputGroup style={{display:"flex",position:"fixed", width:"40%",top:'1%',left:'30%' }}>
-        <Input onChange={event => setQuery(event.target.value)} />
-        <InputGroupAddon addonType="append">
-          <Button color={"secondary"}>Search!</Button>
-        </InputGroupAddon>
+      <Modal show={modalShow}>
+        <Modal.Header>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Card id={modalInfo?.id +"card"} varient="light" className="p-4" header={header(modalInfo)}
+                style={{background:'#ecd3d3',height:"90%",width:'90%',position:"relative",top:"5%",bottom:"5%"}}
+                image={modalInfo?.owner?.avatar_url}
+                inputs={[
+                  {
+                    name: "Full name",
+                    value: modalInfo.full_name,
+                    placeholder: modalInfo.full_name,
+                    label: "Full name",
+                    type: "text",
+                  },
+                  {
+                    name: "Description",
+                    value: modalInfo.description,
+                    placeholder: modalInfo.description,
+                    label: "Description",
+                    type: "textarea",
+                  },
+                ]}
+                onSubmitForm={()=>setModal(false)}
+                buttonsubmit={{
+                  label: "Close",
+                  isLoading: false,
+                }}
+          ></Card>
+        </Modal.Body>
+      </Modal>
+      <InputGroup className="mb-3" style={{display:"flex",position:"fixed", width:"40%",top:'1%',left:'30%' }}>
+        <FormControl onChange={event => setQuery(event.target.value)}/>
+        <Button variant="outline-secondary" id="button-addon2">
+          Search!
+        </Button>
       </InputGroup>
       <div className={'neumorphism'} style={{display:"flex",position:"fixed",inset: '10% 5% 15% 5%',flexDirection:"column",padding:"1%" }}>
         <Container style={{overflowY:"scroll",overflowX:"hidden"}}>
@@ -54,7 +91,7 @@ const Catalog: React.FC = () => {
                         type: "textarea",
                       },
                     ]}
-                    onSubmitForm={(data)=>console.log(data)}
+                    onSubmitForm={(data)=>{setModalInfo(res);setModal(true);}}
                     buttonsubmit={{
                       label: "View more",
                       isLoading: false,
@@ -65,24 +102,7 @@ const Catalog: React.FC = () => {
           </Row>
         </Container>
       </div>
-      <Pagination aria-label="Page navigation example"  style={{display:"flex",position:"fixed", width:"40%",bottom:'2%',left:'35%' }}>
-        <PaginationItem disabled={page===1} onClick={event => setPage(1)}>
-          <PaginationLink first />
-        </PaginationItem>
-        <PaginationItem disabled={page===1} onClick={event => setPage(page-1)}>
-          <PaginationLink previous/>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#" >{page}</PaginationLink>
-        </PaginationItem>
-
-        <PaginationItem disabled={page===10} onClick={event => setPage(page+1)}>
-          <PaginationLink next  />
-        </PaginationItem>
-        <PaginationItem disabled={page===10} onClick={event => setPage(10)}>
-          <PaginationLink last href="#" />
-        </PaginationItem>
-      </Pagination>
+      <Page maxValue={10} value={page} onValueChange={(val)=>setPage(val)} />
     </React.Fragment>
   );
 };
