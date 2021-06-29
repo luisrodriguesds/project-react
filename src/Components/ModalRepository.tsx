@@ -1,5 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { Modal as ModalWindow, Button, Image } from "react-bootstrap";
+import { useAuth } from "../contexts/auth";
+import { useStar } from "../contexts/star";
 
 interface IModal extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
@@ -20,8 +22,11 @@ const ModalRepository: React.FC<IModal> = ({
   handleIsOpen,
   repository,
 }) => {
+  const { user } = useAuth();
+  const { handleStar, checkStar } = useStar();
+
   return (
-    <ModalWindow show={isOpen} onHide={handleIsOpen}>
+    <ModalWindow show={isOpen} size="xl" onHide={handleIsOpen}>
       <ModalWindow.Header>
         <ModalWindow.Title>{repository.owner?.login}</ModalWindow.Title>
       </ModalWindow.Header>
@@ -37,9 +42,27 @@ const ModalRepository: React.FC<IModal> = ({
         <Button variant="secondary" onClick={handleIsOpen}>
           Close
         </Button>
-        <Button variant="secondary" onClick={handleIsOpen}>
+        <Button
+          variant="secondary"
+          onClick={() =>
+            handleStar({
+              repository_id: repository.id,
+              user_id: user.id,
+            })
+          }
+        >
           Start
-          <i className="bi bi-star" style={{ marginLeft: "8px" }}></i>
+          <i
+            className={`bi ${
+              checkStar({
+                repository_id: repository.id,
+                user_id: user.id,
+              })
+                ? `bi-star-fill`
+                : `bi-star`
+            }`}
+            style={{ marginLeft: "8px" }}
+          ></i>
         </Button>
       </ModalWindow.Footer>
     </ModalWindow>

@@ -6,6 +6,7 @@ import { Button, Col, Form, Row, ButtonGroup, Card } from "react-bootstrap";
 import ModalRepository from "../Components/ModalRepository";
 import Template from "../weigets/Template";
 import { searchRepositories } from "../services/githubApi";
+import { useStar } from "../contexts/star";
 
 interface IRepository {
   id: number;
@@ -17,9 +18,11 @@ interface IRepository {
 }
 
 const Catalog: React.FC = () => {
-  const { checkIfFavorite, addFavorite, removeFavorite } = useAuth();
+  const { handleStar, checkStar } = useStar();
+  const { user } = useAuth();
+
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState("a");
+  const [query, setQuery] = useState("abc");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalCurrentItem, setModalCurrentItem] = useState<IRepository>({
     id: 0,
@@ -31,18 +34,6 @@ const Catalog: React.FC = () => {
   });
   const [repos, setRepos] = useState<IRepository[]>([]);
 
-  // const header = (res: any) => (
-  //   <React.Fragment>
-  //     {res.name}
-  //     <i
-  //       style={{ marginLeft: "10px", color: "yellow" }}
-  //       onClick={() =>
-  //         checkIfFavorite(res) ? removeFavorite(res) : addFavorite(res)
-  //       }
-  //       className={checkIfFavorite(res) ? "bi bi-star-fill" : "bi bi-star"}
-  //     ></i>
-  //   </React.Fragment>
-  // );
   // useEffect(() => {
   //   fetch(
   //     `https://api.github.com/search/repositories?q=${query}&per_page=10&page=${page}`,
@@ -85,49 +76,6 @@ const Catalog: React.FC = () => {
 
   return (
     <Template>
-      {/* <Modal show={modalShow}>
-        <Modal.Header>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Card
-            id={modalInfo?.id + "card"}
-            varient="light"
-            className="p-4"
-            header={header(modalInfo)}
-            style={{
-              background: "#ecd3d3",
-              height: "90%",
-              width: "90%",
-              position: "relative",
-              top: "5%",
-              bottom: "5%",
-            }}
-            image={modalInfo?.owner?.avatar_url}
-            inputs={[
-              {
-                name: "Full name",
-                value: modalInfo.full_name,
-                placeholder: modalInfo.full_name,
-                label: "Full name",
-                type: "text",
-              },
-              {
-                name: "Description",
-                value: modalInfo.description,
-                placeholder: modalInfo.description,
-                label: "Description",
-                type: "textarea",
-              },
-            ]}
-            onSubmitForm={() => setModal(false)}
-            buttonsubmit={{
-              label: "Close",
-              isLoading: false,
-            }}
-          ></Card>
-        </Modal.Body>
-      </Modal> */}
       <ModalRepository
         isOpen={modalIsOpen}
         handleIsOpen={handleModalIsOpen}
@@ -171,9 +119,27 @@ const Catalog: React.FC = () => {
                       style={{ marginLeft: "8px" }}
                     ></i>
                   </Button>
-                  <Button variant="secondary">
+                  <Button
+                    variant="secondary"
+                    onClick={() =>
+                      handleStar({
+                        repository_id: repository.id,
+                        user_id: user.id,
+                      })
+                    }
+                  >
                     Start
-                    <i className="bi bi-star" style={{ marginLeft: "8px" }}></i>
+                    <i
+                      className={`bi ${
+                        checkStar({
+                          repository_id: repository.id,
+                          user_id: user.id,
+                        })
+                          ? `bi-star-fill`
+                          : `bi-star`
+                      }`}
+                      style={{ marginLeft: "8px" }}
+                    ></i>
                   </Button>
                 </ButtonGroup>
               </Card.Body>
@@ -181,66 +147,7 @@ const Catalog: React.FC = () => {
           </Col>
         ))}
       </Row>
-      {/* <div
-        className="neumorphism mt-4"
-        style={{
-          // position: "fixed",
-          // inset: "10% 5% 15% 5%",
-          padding: "1%",
-        }}
-      >
-        <Container
-          style={{
-            overflowY: "scroll",
-            overflowX: "hidden",
-            height: "calc(100vh - 180px)",
-          }}
-        >
-          <Row>
-            {repos?.map((res) => (
-              <Col key={res.id} className="spacing mb-4" lg="4" sm="4" xs="12">
-                <Card
-                  id={res.id + "card"}
-                  varient="light"
-                  className="p-4"
-                  header={header(res)}
-                  style={{
-                    background: "#ecd3d3",
-                    position: "relative",
-                    top: "5%",
-                    bottom: "5%",
-                  }}
-                  image={res.owner.avatar_url}
-                  inputs={[
-                    {
-                      name: "Full name",
-                      value: res.full_name,
-                      placeholder: res.full_name,
-                      label: "Full name",
-                      type: "text",
-                    },
-                    {
-                      name: "Description",
-                      value: res.description,
-                      placeholder: res.description,
-                      label: "Description",
-                      type: "textarea",
-                    },
-                  ]}
-                  onSubmitForm={(data) => {
-                    setModalInfo(res);
-                    setModal(true);
-                  }}
-                  buttonsubmit={{
-                    label: "View more",
-                    isLoading: false,
-                  }}
-                ></Card>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </div>
+      {/*
       <Page maxValue={10} value={page} onValueChange={(val) => setPage(val)} /> */}
     </Template>
   );
