@@ -51,6 +51,7 @@ const Catalog: React.FC = () => {
     const timer = setTimeout(() => {
       searchRepositories({
         repository: query,
+        perPage: 9,
       }).then((response) => {
         setRepos(response.items as any);
       });
@@ -67,11 +68,11 @@ const Catalog: React.FC = () => {
     setModalIsOpen(!modalIsOpen);
   }
 
-  function textLimit(text: string) {
+  function textLimit(text: string, limit = 36) {
     if (!text) {
       return "";
     }
-    return text.length >= 36 ? `${text.substring(0, 36)} ...` : text;
+    return text.length >= limit ? `${text.substring(0, limit)} ...` : text;
   }
 
   return (
@@ -96,28 +97,25 @@ const Catalog: React.FC = () => {
       <Row>
         {repos.map((repository) => (
           <Col sm="12" lg="4" md="4" key={`${repository.id}`} className="mb-4">
-            <Card>
+            <Card className="card-shadow">
               <Card.Img
                 variant="top"
                 src={`${repository.owner.avatar_url}`}
-                style={{ maxHeight: "200px", objectFit: "cover" }}
+                className="card-img"
               />
               <Card.Body>
-                <Card.Title>{repository.full_name}</Card.Title>
-                <Card.Text className="">
-                  {textLimit(repository.description) || "None description"}
+                <Card.Title>{textLimit(repository.full_name, 26)}</Card.Title>
+                <Card.Text className="height-desction-card">
+                  {textLimit(repository.description, 52) || "None description"}
                 </Card.Text>
                 <ButtonGroup aria-label="Basic example" className="w-100">
                   <Button
                     variant="secondary"
-                    style={{ borderRight: "2px solid white" }}
+                    className="btn-line-group"
                     onClick={() => handleSetCurrentRepository(repository)}
                   >
                     View
-                    <i
-                      className="bi bi-window"
-                      style={{ marginLeft: "8px" }}
-                    ></i>
+                    <i className="bi bi-window ml-sm"></i>
                   </Button>
                   <Button
                     variant="secondary"
@@ -130,7 +128,7 @@ const Catalog: React.FC = () => {
                   >
                     Start
                     <i
-                      className={`bi ${
+                      className={`ml-sm bi ${
                         checkStar({
                           repository_id: repository.id,
                           user_id: user.id,
@@ -138,7 +136,6 @@ const Catalog: React.FC = () => {
                           ? `bi-star-fill`
                           : `bi-star`
                       }`}
-                      style={{ marginLeft: "8px" }}
                     ></i>
                   </Button>
                 </ButtonGroup>

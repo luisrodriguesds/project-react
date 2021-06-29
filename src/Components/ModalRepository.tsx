@@ -53,7 +53,7 @@ const ModalRepository: React.FC<IModal> = ({
         >
           Start
           <i
-            className={`bi ${
+            className={`ml-sm bi ${
               checkStar({
                 repository_id: repository.id,
                 user_id: user.id,
@@ -61,7 +61,6 @@ const ModalRepository: React.FC<IModal> = ({
                 ? `bi-star-fill`
                 : `bi-star`
             }`}
-            style={{ marginLeft: "8px" }}
           ></i>
         </Button>
       </ModalWindow.Footer>
