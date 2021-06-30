@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 import { Form } from "react-bootstrap";
 
 import { Card } from "react-bootstrap";
-import Button from "../Components/Button";
+import Button from "../components/Button";
 
 type varients =
   | "primary"

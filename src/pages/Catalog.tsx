@@ -1,12 +1,13 @@
-import { useAuth } from "../contexts/auth";
 import React, { useEffect, useState } from "react";
+
+import { useAuth } from "../contexts/auth";
 import { Button, Col, Form, Row, ButtonGroup, Card } from "react-bootstrap";
-// import Card from "../Components/Card";
-// import Page from "../Components/Page";
-import ModalRepository from "../Components/ModalRepository";
-import Template from "../weigets/Template";
 import { searchRepositories } from "../services/githubApi";
 import { useStar } from "../contexts/star";
+
+import ModalRepository from "../components/ModalRepository";
+import Template from "../components/Template";
+import Paginate from "../components/Paginate";
 
 interface IRepository {
   id: number;
@@ -22,6 +23,7 @@ const Catalog: React.FC = () => {
   const { user } = useAuth();
 
   const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(9);
   const [query, setQuery] = useState("abc");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalCurrentItem, setModalCurrentItem] = useState<IRepository>({
@@ -51,13 +53,14 @@ const Catalog: React.FC = () => {
     const timer = setTimeout(() => {
       searchRepositories({
         repository: query,
-        perPage: 9,
+        perPage,
+        page,
       }).then((response) => {
         setRepos(response.items as any);
       });
     }, 1000);
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, perPage, page]);
 
   function handleSetCurrentRepository(repository: IRepository) {
     setModalCurrentItem(repository);
@@ -144,8 +147,23 @@ const Catalog: React.FC = () => {
           </Col>
         ))}
       </Row>
-      {/*
-      <Page maxValue={10} value={page} onValueChange={(val) => setPage(val)} /> */}
+      <Row>
+        <Col lg="3">
+          <select
+            className="form-select"
+            onChange={(e) => setPerPage(Number(e.target.value))}
+            value={perPage}
+          >
+            <option value="6">6</option>
+            <option value="9">9</option>
+            <option value="12">12</option>
+            <option value="15">15</option>
+          </select>
+        </Col>
+        <Col className="d-flex justify-content-end">
+          <Paginate handleCurrentPage={setPage} currentPage={page} />
+        </Col>
+      </Row>
     </Template>
   );
 };

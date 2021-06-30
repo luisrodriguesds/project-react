@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
 // import GenericCard from "../Components/GenericCard";
-import Card, { IInputCard } from "../Components/Card";
+import Card, { IInputCard } from "../components/Card";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth } from "../contexts/auth";
-import Alert from "../Components/AlertMessage";
+import Alert from "../components/AlertMessage";
 
 const SignIn: React.FC = () => {
   const { signIn } = useAuth();
@@ -80,7 +80,8 @@ const SignIn: React.FC = () => {
             handleIsOpen={setErrorIsOpen}
             variant="danger"
           />
-          <Card id={"signinCard"}
+          <Card
+            id={"signinCard"}
             varient="light"
             className="p-4"
             header="Login Panel"
