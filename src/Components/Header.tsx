@@ -18,7 +18,9 @@ const Header: React.FC = () => {
           </Nav>
         </div>
         <div className="d-flex align-items-center">
-          <div className="text-white mx-4">Olá, {user.name}!</div>
+          <div className="text-white mx-4">
+            Olá, <span data-testid="header-user-name">{user.name}</span>!
+          </div>
           <Button onClick={() => singOut()} variant="light">
             Logout
           </Button>

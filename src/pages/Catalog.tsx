@@ -70,6 +70,9 @@ const Catalog: React.FC = () => {
         .then((response) => {
           setRepos(response.items);
         })
+        .catch((err) => {
+          console.log(err);
+        })
         .finally(() => {
           setLoadingPage(false);
           setLoadingRepository(false);

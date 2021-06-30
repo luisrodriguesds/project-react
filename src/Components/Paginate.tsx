@@ -4,10 +4,15 @@ import { Pagination } from "react-bootstrap";
 interface IPaginate {
   currentPage: number;
   handleCurrentPage: (page: number) => void;
+  maxPage?: number;
 }
 
-const Paginate: React.FC<IPaginate> = ({ currentPage, handleCurrentPage }) => {
-  const links = Array.from(Array(5).keys());
+const Paginate: React.FC<IPaginate> = ({
+  currentPage,
+  handleCurrentPage,
+  maxPage = 5,
+}) => {
+  const links = Array.from(Array(maxPage).keys());
 
   return (
     <Pagination>
@@ -16,8 +21,10 @@ const Paginate: React.FC<IPaginate> = ({ currentPage, handleCurrentPage }) => {
         disabled={currentPage === 1}
         onClick={() => handleCurrentPage(currentPage - 1)}
       />
-      {links.map((link) => (
+      {links.map((link, i) => (
         <Pagination.Item
+          key={`paginate-${i}`}
+          data-testid={`paginate-link`}
           onClick={() => handleCurrentPage(link + 1)}
           className={`${currentPage === link + 1 ? "active" : ""}`}
         >
@@ -25,7 +32,7 @@ const Paginate: React.FC<IPaginate> = ({ currentPage, handleCurrentPage }) => {
         </Pagination.Item>
       ))}
       <Pagination.Next
-        disabled={currentPage === 5}
+        disabled={currentPage === maxPage}
         onClick={() => handleCurrentPage(currentPage + 1)}
       />
       {/* <Pagination.Last /> */}

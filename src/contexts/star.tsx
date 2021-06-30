@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 interface IInputStar {
   repository_id: number;
@@ -55,10 +49,6 @@ const StarProvider: React.FC = ({ children }) => {
     },
     [stars]
   );
-
-  useEffect(() => {
-    console.log(stars, "show starts");
-  }, [stars]);
 
   const checkStar = useCallback(
     ({ user_id, repository_id }: IInputStar) => {

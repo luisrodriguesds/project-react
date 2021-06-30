@@ -29,6 +29,7 @@ const AlertMessage: React.FC<IAlertMessage> = ({
       <div className="d-flex justify-content-between">
         {message}
         <span
+          data-testid="alert-close-button"
           onClick={() => handleIsOpen(false)}
           style={{ cursor: "pointer", lineHeight: "10px" }}
         >

@@ -65,7 +65,6 @@ const SignIn: React.FC = () => {
     } catch (error) {
       setMessageError(error.message);
       setErrorIsOpen(true);
-    } finally {
       setBtnLoading(false);
     }
   }
