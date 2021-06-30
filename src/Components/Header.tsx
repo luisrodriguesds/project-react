@@ -12,7 +12,9 @@ const Header: React.FC = () => {
         <div className="d-flex">
           <Navbar.Brand href="/catalog">Celfocus</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/catalog">Catalog</Nav.Link>
+            <Nav.Link href="/catalog" className="active">
+              Catalog
+            </Nav.Link>
           </Nav>
         </div>
         <div className="d-flex align-items-center">
