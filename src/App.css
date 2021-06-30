@@ -1,42 +1,24 @@
 body {
   background-color: #e5e5e5 !important;
 }
-/* .App {
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  background: linear-gradient(145deg, #f0f0f0, #cacaca);
-} */
 
-.neumorphism {
-  min-height: calc(100vh - 180px);
-  border-radius: 48px;
-  background: linear-gradient(145deg, #f0f0f0, #cacaca);
-  box-shadow: 8px 8px 16px #5a5a5a, -8px -8px 16px #ffffff;
-}
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  padding-bottom: 30px;
-  padding-top: 30px;
-  overflow-x: hidden;
-  overflow-y: hidden;
+.card-shadow {
+  box-shadow: 2px 2px 10px -4px rgb(0 0 0 / 73%);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(90, 90, 90);
-  border-radius: 30px;
+.ml-sm {
+  margin-left: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  padding-bottom: 30px;
-  padding-top: 30px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  border-radius: 30px;
+.card-img {
+  max-height: 200px;
+  object-fit: cover;
 }
-.spacing {
-  margin-top: 30px;
+
+.height-desction-card {
+  min-height: 50px;
+}
+
+.btn-line-group {
+  border-right: 2px solid white !important;
 }

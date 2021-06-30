@@ -26,7 +26,11 @@ const Button: React.FC<IButton> = ({
 }) => {
   return (
     <Btn disabled={loading} variant={variant} {...rest}>
-      {!loading ? title : <Spinner animation="border" size="sm" />}
+      {!loading ? (
+        title
+      ) : (
+        <Spinner animation="border" data-testid="btn-spinner" size="sm" />
+      )}
     </Btn>
   );
 };

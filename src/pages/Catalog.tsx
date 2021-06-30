@@ -1,175 +1,217 @@
-import { useAuth } from "../contexts/auth";
 import React, { useEffect, useState } from "react";
+
+import { useAuth } from "../contexts/auth";
 import {
   Button,
   Col,
-  Container,
-  Input,
-  InputGroup,
-  InputGroupAddon,
+  Form,
   Row,
-} from "reactstrap";
-import Card from "../Components/Card";
-import Template from "../weigets/Template";
-import { Modal } from "react-bootstrap";
-import Page from "../Components/Page";
+  ButtonGroup,
+  Card,
+  Spinner,
+} from "react-bootstrap";
+import { searchRepositories } from "../services/githubApi";
+import { useStar } from "../contexts/star";
 
-const userTOKEN = `${process.env.REACT_APP_GITHUB_TOKEN}`;
+import ModalRepository from "../components/ModalRepository";
+import Template from "../components/Template";
+import Paginate from "../components/Paginate";
+
+interface IRepository {
+  id: number;
+  full_name: string;
+  description: string;
+  owner: {
+    avatar_url: string;
+  };
+}
+
 const Catalog: React.FC = () => {
-  const { checkIfFavorite, addFavorite, removeFavorite } = useAuth();
-  const [page, setPage] = useState(1);
-  const [query, setQuery] = useState("a");
-  const [modalShow, setModal] = useState(false);
-  const [modalInfo, setModalInfo]: [any, any] = useState({});
-  const [repos, setRepos]: [
-    any[],
-    React.Dispatch<React.SetStateAction<never[]>>
-  ] = useState([]);
+  const { handleStar, checkStar } = useStar();
+  const { user } = useAuth();
 
-  const header = (res: any) => (
-    <React.Fragment>
-      {res.name}
-      <i
-        style={{ marginLeft: "10px", color: "yellow" }}
-        onClick={() =>
-          checkIfFavorite(res) ? removeFavorite(res) : addFavorite(res)
-        }
-        className={checkIfFavorite(res) ? "bi bi-star-fill" : "bi bi-star"}
-      ></i>
-    </React.Fragment>
-  );
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingRepository, setLoadingRepository] = useState(true);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(9);
+  const [query, setQuery] = useState("abc");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalCurrentItem, setModalCurrentItem] = useState<IRepository>({
+    id: 0,
+    full_name: "",
+    description: "",
+    owner: {
+      avatar_url: "",
+    },
+  });
+  const [repos, setRepos] = useState<IRepository[]>([]);
+
+  // useEffect(() => {
+  //   fetch(
+  //     `https://api.github.com/search/repositories?q=${query}&per_page=10&page=${page}`,
+  //     {
+  //       headers: {
+  //         authorization: "token " + userTOKEN,
+  //       },
+  //     }
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => setRepos(res.items));
+  // }, [query, page]);
+
   useEffect(() => {
-    fetch(
-      `https://api.github.com/search/repositories?q=${query}&per_page=10&page=${page}`,
-      {
-        headers: {
-          authorization: "token " + userTOKEN,
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => setRepos(res.items));
-  }, [query, page]);
+    setLoadingRepository(true);
+    const timer = setTimeout(() => {
+      searchRepositories({
+        repository: query,
+        perPage,
+        page,
+      })
+        .then((response) => {
+          setRepos(response.items);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoadingPage(false);
+          setLoadingRepository(false);
+        });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [query, perPage, page]);
+
+  // Go to the first page when the user is typing
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
+
+  function handleSetCurrentRepository(repository: IRepository) {
+    setModalCurrentItem(repository);
+    handleModalIsOpen();
+  }
+
+  function handleModalIsOpen() {
+    setModalIsOpen(!modalIsOpen);
+  }
+
+  function textLimit(text: string, limit = 36) {
+    if (!text) {
+      return "";
+    }
+    return text.length >= limit ? `${text.substring(0, limit)} ...` : text;
+  }
 
   return (
     <Template>
-      <Modal show={modalShow}>
-        <Modal.Header>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Card
-            id={modalInfo?.id + "card"}
-            varient="light"
-            className="p-4"
-            header={header(modalInfo)}
-            style={{
-              background: "#ecd3d3",
-              height: "90%",
-              width: "90%",
-              position: "relative",
-              top: "5%",
-              bottom: "5%",
-            }}
-            image={modalInfo?.owner?.avatar_url}
-            inputs={[
-              {
-                name: "Full name",
-                value: modalInfo.full_name,
-                placeholder: modalInfo.full_name,
-                label: "Full name",
-                type: "text",
-              },
-              {
-                name: "Description",
-                value: modalInfo.description,
-                placeholder: modalInfo.description,
-                label: "Description",
-                type: "textarea",
-              },
-            ]}
-            onSubmitForm={() => setModal(false)}
-            buttonsubmit={{
-              label: "Close",
-              isLoading: false,
-            }}
-          ></Card>
-        </Modal.Body>
-      </Modal>
-      <Row>
-        <Col sm="12" lg="6" md="8" className="mx-auto">
-          <InputGroup>
-            <Input
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search Repo on Github!"
-            />
-            <InputGroupAddon addonType="append">
-              <Button color="secondary">Search!</Button>
-            </InputGroupAddon>
-          </InputGroup>
+      <ModalRepository
+        isOpen={modalIsOpen}
+        handleIsOpen={handleModalIsOpen}
+        repository={modalCurrentItem}
+      />
+      <Row className="mb-4">
+        <Col sm="12" lg="6" md="8" className="mx-auto d-flex">
+          <Form.Control
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search Repo on Github!"
+            className=""
+          />
+          <Button variant="secondary" style={{ flex: "1" }}>
+            Search!
+          </Button>
         </Col>
       </Row>
-      <div
-        className="neumorphism mt-4"
-        style={{
-          // position: "fixed",
-          // inset: "10% 5% 15% 5%",
-          padding: "1%",
-        }}
-      >
-        <Container
-          style={{
-            overflowY: "scroll",
-            overflowX: "hidden",
-            height: "calc(100vh - 180px)",
-          }}
-        >
-          <Row>
-            {repos?.map((res) => (
-              <Col key={res.id} className="spacing mb-4" lg="4" sm="4" xs="12">
-                <Card
-                  id={res.id + "card"}
-                  varient="light"
-                  className="p-4"
-                  header={header(res)}
-                  style={{
-                    background: "#ecd3d3",
-                    position: "relative",
-                    top: "5%",
-                    bottom: "5%",
-                  }}
-                  image={res.owner.avatar_url}
-                  inputs={[
-                    {
-                      name: "Full name",
-                      value: res.full_name,
-                      placeholder: res.full_name,
-                      label: "Full name",
-                      type: "text",
-                    },
-                    {
-                      name: "Description",
-                      value: res.description,
-                      placeholder: res.description,
-                      label: "Description",
-                      type: "textarea",
-                    },
-                  ]}
-                  onSubmitForm={(data) => {
-                    setModalInfo(res);
-                    setModal(true);
-                  }}
-                  buttonsubmit={{
-                    label: "View more",
-                    isLoading: false,
-                  }}
-                ></Card>
-              </Col>
-            ))}
-          </Row>
-        </Container>
+      {loadingPage && (
+        <div className="d-flex justify-content-center">
+          <Spinner animation="border" />
+        </div>
+      )}
+      <div className={loadingPage === true ? "d-none" : "d-block"}>
+        {loadingRepository && (
+          <div className="d-flex justify-content-center mb-4">
+            <Spinner animation="border" />
+          </div>
+        )}
+        <Row>
+          {repos.map((repository) => (
+            <Col
+              sm="12"
+              lg="4"
+              md="4"
+              key={`${repository.id}`}
+              className="mb-4"
+            >
+              <Card className="card-shadow">
+                <Card.Img
+                  variant="top"
+                  src={`${repository.owner.avatar_url}`}
+                  className="card-img"
+                />
+                <Card.Body>
+                  <Card.Title>{textLimit(repository.full_name, 26)}</Card.Title>
+                  <Card.Text className="height-desction-card">
+                    {textLimit(repository.description, 52) ||
+                      "None description"}
+                  </Card.Text>
+                  <ButtonGroup aria-label="Basic example" className="w-100">
+                    <Button
+                      variant="secondary"
+                      className="btn-line-group"
+                      onClick={() => handleSetCurrentRepository(repository)}
+                    >
+                      View
+                      <i className="bi bi-window ml-sm"></i>
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        handleStar({
+                          repository_id: repository.id,
+                          user_id: user.id,
+                        })
+                      }
+                    >
+                      Start
+                      <i
+                        className={`ml-sm bi ${
+                          checkStar({
+                            repository_id: repository.id,
+                            user_id: user.id,
+                          })
+                            ? `bi-star-fill`
+                            : `bi-star`
+                        }`}
+                      ></i>
+                    </Button>
+                  </ButtonGroup>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+        {loadingRepository && (
+          <div className="d-flex justify-content-center mt-4">
+            <Spinner animation="border" />
+          </div>
+        )}
+        <Row>
+          <Col lg="3">
+            <select
+              className="form-select"
+              onChange={(e) => setPerPage(Number(e.target.value))}
+              value={perPage}
+            >
+              <option value="6">6</option>
+              <option value="9">9</option>
+              <option value="12">12</option>
+              <option value="15">15</option>
+            </select>
+          </Col>
+          <Col className="d-flex justify-content-end">
+            <Paginate handleCurrentPage={setPage} currentPage={page} />
+          </Col>
+        </Row>
       </div>
-      <Page maxValue={10} value={page} onValueChange={(val) => setPage(val)} />
     </Template>
   );
 };

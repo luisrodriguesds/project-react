@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import AuthProvider from "./contexts/auth";
+import StarProvider from "./contexts/star";
 
 import Routes from "./routes";
 
@@ -11,7 +12,9 @@ function App() {
     <div className="App">
       <Router>
         <AuthProvider>
-          <Routes />
+          <StarProvider>
+            <Routes />
+          </StarProvider>
         </AuthProvider>
       </Router>
     </div>
