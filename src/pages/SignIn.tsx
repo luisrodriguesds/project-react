@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-// import GenericCard from "../Components/GenericCard";
-import Card, { IInputCard } from "src/components/Card";
+import Card, { IInputCard } from "../components/Card";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth } from "../contexts/auth";
 import Alert from "../components/AlertMessage";

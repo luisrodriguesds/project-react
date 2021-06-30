@@ -9,13 +9,13 @@ pipeline {
 
         stage("Test and Build") {
             steps {
-                withCredentials([token(credentialsId: 'github-token', variable: 'GITHUB-TOKEN')]){
-                  sh '''
-                    echo 'REACT_APP_GITHUB_TOKEN=${GITHUB-TOKEN}' > .env
-                    echo 'REACT_APP_GITHUB_TOKEN=${GITHUB-TOKEN}' > .env.test.local
+                withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]){
+                  sh """
+                    echo 'REACT_APP_GITHUB_TOKEN=${TOKEN}' > .env
+                    echo 'REACT_APP_GITHUB_TOKEN=${TOKEN}' > .env.test.local
                     npm run test
                     npm run build
-                  '''
+                  """
                 }
             }
         }
