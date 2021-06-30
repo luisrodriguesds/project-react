@@ -43,6 +43,7 @@ describe("AlertMessage component", () => {
 
   it("should close correctly", async () => {
     function handleIsOpen(isOpen: boolean) {}
+
     render(
       <AlertMessage
         handleIsOpen={handleIsOpen}
