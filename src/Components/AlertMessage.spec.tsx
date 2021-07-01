@@ -1,22 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import AlertMessage from "./AlertMessage";
 
-// jest.mock('next/route', () => {
-//   return {
-//     useRoute() {
-//       return {
-//         asPath: '/'
-//       }
-//     }
-//   }
-// })
+const mockHandleIsOpen = jest.fn();
+mockHandleIsOpen.mockClear();
 
 describe("AlertMessage component", () => {
   it("should render correctly", () => {
-    function handleIsOpen(isOpen: boolean) {}
     render(
       <AlertMessage
-        handleIsOpen={handleIsOpen}
+        handleIsOpen={mockHandleIsOpen}
         isOpen={true}
         message="Alert test"
         variant="danger"
@@ -26,27 +18,10 @@ describe("AlertMessage component", () => {
     expect(screen.getByText("Alert test")).toBeInTheDocument();
   });
 
-  // it("should close when click in close button", () => {
-  //   const [isOpen, setIsOpen] = useState(true);
-
-  //   const { getByTestId, getByText } = render(
-  //     <AlertMessage
-  //       handleIsOpen={setIsOpen}
-  //       isOpen={isOpen}
-  //       message="Alert test"
-  //       variant="danger"
-  //     />
-  //   );
-  //   getByTestId("alert-close-button").click();
-  //   expect(getByText("Alert test")).toBeInTheDocument();
-  // });
-
   it("should close correctly", async () => {
-    function handleIsOpen(isOpen: boolean) {}
-
     render(
       <AlertMessage
-        handleIsOpen={handleIsOpen}
+        handleIsOpen={mockHandleIsOpen}
         isOpen={false}
         message="Alert test"
         variant="danger"
@@ -54,5 +29,20 @@ describe("AlertMessage component", () => {
     );
 
     expect(screen.queryByText("Alert test")).not.toBeInTheDocument();
+  });
+
+  it("should close when click in close button", async () => {
+    render(
+      <AlertMessage
+        handleIsOpen={mockHandleIsOpen}
+        isOpen={true}
+        message="Alert test"
+        variant="danger"
+      />
+    );
+
+    fireEvent.click(screen.getByTestId("btn-alert-close"));
+
+    expect(mockHandleIsOpen).toBeCalled();
   });
 });
