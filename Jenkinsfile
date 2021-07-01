@@ -14,6 +14,7 @@ pipeline {
                     echo 'REACT_APP_GITHUB_TOKEN=${TOKEN}' > .env
                     echo 'REACT_APP_GITHUB_TOKEN=${TOKEN}' > .env.local
                     echo 'REACT_APP_GITHUB_TOKEN=${TOKEN}' > .env.test.local
+                    npm run test
                     npm run build
                   """
                 }
@@ -22,7 +23,8 @@ pipeline {
 
         stage("Deploy") {
             steps {
-                sh "cp -r ${WORKSPACE}/build/ /var/www/html/"
+                sh "cd ${WORKSPACE}/build/"
+                sh "cp -R . /var/www/html/"
             }
         }
     }
