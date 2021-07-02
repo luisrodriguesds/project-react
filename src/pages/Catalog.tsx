@@ -46,19 +46,6 @@ const Catalog: React.FC = () => {
   });
   const [repos, setRepos] = useState<IRepository[]>([]);
 
-  // useEffect(() => {
-  //   fetch(
-  //     `https://api.github.com/search/repositories?q=${query}&per_page=10&page=${page}`,
-  //     {
-  //       headers: {
-  //         authorization: "token " + userTOKEN,
-  //       },
-  //     }
-  //   )
-  //     .then((res) => res.json())
-  //     .then((res) => setRepos(res.items));
-  // }, [query, page]);
-
   useEffect(() => {
     setLoadingRepository(true);
     const timer = setTimeout(() => {
