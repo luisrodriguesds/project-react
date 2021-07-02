@@ -114,7 +114,7 @@ const CardLogin: React.FC<ICard> = ({
             <Button
               variant="dark"
               loading={buttonsubmit?.isLoading}
-              title={buttonsubmit?.label || ""}
+              title={buttonsubmit?.label || "Button"}
               type="submit"
               className="w-100"
             />

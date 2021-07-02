@@ -24,7 +24,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 sh "cd ${WORKSPACE}/build/"
-                sh "cp -R . /var/www/html/"
+                sh "cp -R * /var/www/html/ -f"
             }
         }
     }

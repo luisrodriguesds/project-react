@@ -14,12 +14,12 @@ jest.mock("../contexts/auth", () => {
 });
 
 describe("Header component", () => {
-  it("should render corretly", () => {
+  it("should render correctly", () => {
     render(<Header />);
     expect(screen.getByText("Catalog")).toBeInTheDocument();
   });
 
-  it("should render the user name corretly", () => {
+  it("should render the user name correctly", () => {
     render(<Header />);
     expect(screen.getByTestId("header-user-name")).toHaveTextContent(
       "Jhon Doe"

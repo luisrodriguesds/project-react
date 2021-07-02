@@ -133,13 +133,14 @@ const Catalog: React.FC = () => {
           </div>
         )}
         <Row>
-          {repos.map((repository) => (
+          {repos.map((repository, i) => (
             <Col
               sm="12"
               lg="4"
               md="4"
               key={`${repository.id}`}
               className="mb-4"
+              data-testid={`repo-item-${i + 1}`}
             >
               <Card className="card-shadow">
                 <Card.Img

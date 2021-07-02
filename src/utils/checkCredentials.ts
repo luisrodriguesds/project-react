@@ -12,7 +12,7 @@ export async function checkCredentials({ email, password }: ICheckCredentials) {
     (api) => api.user.email === email && api.user.password === password
   );
   if (!resAPI) {
-    throw new Error("Email or password is incorrect");
+    throw new Error("Email or password is worng");
   }
   return resAPI;
 }

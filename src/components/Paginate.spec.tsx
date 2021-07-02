@@ -4,7 +4,7 @@ import Paginate from "./Paginate";
 const mockHandleCurrentPage = jest.fn();
 
 describe("Paginate component", () => {
-  it("should render corretly", () => {
+  it("should render correctly", () => {
     render(
       <Paginate currentPage={1} handleCurrentPage={mockHandleCurrentPage} />
     );
@@ -12,7 +12,7 @@ describe("Paginate component", () => {
     expect(screen.getByText("Next")).toBeInTheDocument();
   });
 
-  it("should render max pages corretly", () => {
+  it("should render max pages correctly", () => {
     const maxPage = 10;
     render(
       <Paginate
@@ -24,7 +24,7 @@ describe("Paginate component", () => {
     expect(screen.queryAllByTestId("paginate-link")).toHaveLength(maxPage);
   });
 
-  it("should change the current page corretly", () => {
+  it("should change the current page correctly", () => {
     const maxPage = 10;
     render(
       <Paginate

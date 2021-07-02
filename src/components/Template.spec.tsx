@@ -14,7 +14,7 @@ jest.mock("../contexts/auth", () => {
 });
 
 describe("Tempalte component", () => {
-  it("should render corretly", () => {
+  it("should render correctly", () => {
     render(<Template>Template Test</Template>);
     expect(screen.getByText("Template Test")).toBeInTheDocument();
   });

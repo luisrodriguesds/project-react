@@ -39,7 +39,7 @@ jest.mock("../contexts/star", () => {
 });
 
 describe("Modal component", () => {
-  it("should render corretly", () => {
+  it("should render correctly", () => {
     const repository = {
       id: 123456789,
       full_name: "fake-name",
@@ -63,7 +63,7 @@ describe("Modal component", () => {
     // expect(screen.getByText("fake-avatar-url")).toBeInTheDocument();
   });
 
-  // it("should render the user name corretly", () => {
+  // it("should render the user name correctly", () => {
   //   render(<Header />);
   //   expect(screen.getByTestId("header-user-name")).toHaveTextContent(
   //     "Jhon Doe"
