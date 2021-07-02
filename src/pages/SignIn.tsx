@@ -19,7 +19,7 @@ const SignIn: React.FC = () => {
     {
       name: "password",
       value: "",
-      placeholder: "Password",
+      placeholder: "Enter Password",
       label: "Password",
       type: "password",
     },
