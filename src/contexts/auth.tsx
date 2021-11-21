@@ -62,7 +62,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
         // redirect
         history.push("/catalog");
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(error.message);
       }
     },
