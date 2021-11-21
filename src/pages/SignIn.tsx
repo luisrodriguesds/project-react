@@ -7,10 +7,15 @@ import Alert from "../components/AlertMessage";
 import Button from "../components/Button";
 import { Card, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SignIn: React.FC = () => {
   // const { signIn } = useAuth();
-
+  const schema = yup.object({
+    email: yup.string().required("Campo obrigatorio com yup"),
+    password: yup.string().required("Campo obrigatorio com yup"),
+  });
   const {
     register,
     handleSubmit,
@@ -18,6 +23,7 @@ const SignIn: React.FC = () => {
     formState: { errors },
   } = useForm({
     mode: "all",
+    resolver: yupResolver(schema),
   });
 
   const [messageError, setMessageError] = useState("");
@@ -47,12 +53,7 @@ const SignIn: React.FC = () => {
                   <Form.Control
                     type="text"
                     placeholder="Entrer Email"
-                    {...register("email", {
-                      required: {
-                        value: true,
-                        message: "Campo vazio",
-                      },
-                    })}
+                    {...register("email")}
                   />
                   {errors.email && (
                     <Form.Text style={{ color: "red" }}>
@@ -65,12 +66,7 @@ const SignIn: React.FC = () => {
                   <Form.Control
                     type="password"
                     placeholder="Entrer Password"
-                    {...register("password", {
-                      required: {
-                        value: true,
-                        message: "Campo vazio",
-                      },
-                    })}
+                    {...register("password")}
                   />
                   {errors.password && (
                     <Form.Text style={{ color: "red" }}>
